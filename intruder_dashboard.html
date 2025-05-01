@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Intruder Alerts Dashboard</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #111; color: #eee; }
+    table { width: 100%; border-collapse: collapse; background: #222; }
+    th, td { padding: 10px; border: 1px solid #444; text-align: left; }
+    th { background: #333; }
+  </style>
+</head>
+<body>
+  <h1>📡 Intruder Alert Logs</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Room</th>
+        <th>Time</th>
+        <th>Intruder</th>
+      </tr>
+    </thead>
+    <tbody id="alertTable"></tbody>
+  </table>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB8CfrLrGtOX-aYGSy7uOPG-hn51dQ2Bww",
+      authDomain: "iot-home-based-ids.firebaseapp.com",
+      databaseURL: "https://iot-home-based-ids-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "iot-home-based-ids",
+      storageBucket: "iot-home-based-ids.appspot.com",
+      messagingSenderId: "423082944499",
+      appId: "1:423082944499:web:0721f5dc672948cb6d84b6",
+      measurementId: "G-8CH9X3LT6K"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const alertTable = document.getElementById("alertTable");
+
+    db.ref("alerts").on("value", (snapshot) => {
+      alertTable.innerHTML = ""; // Clear table
+      snapshot.forEach(child => {
+        const data = child.val();
+        const row = `
+          <tr>
+            <td>${data.room}</td>
+            <td>${new Date(data.time).toLocaleString()}</td>
+            <td>${data.intruder ? "🚨 Yes" : "No"}</td>
+          </tr>
+        `;
+        alertTable.innerHTML += row;
+      });
+    });
+  </script>
+</body>
+</html>
