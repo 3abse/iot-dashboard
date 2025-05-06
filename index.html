@@ -58,7 +58,7 @@
             <td>${intruder}</td>
           </tr>
         `;
-        alertTable.innerHTML += row;
+        alertTable.innerHTML = row + alertTable.innerHTML;
       });
     }, (error) => {
       console.error("❌ Firebase read failed:", error);
