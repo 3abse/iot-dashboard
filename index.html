@@ -9,6 +9,7 @@
     table { width: 100%; border-collapse: collapse; background: #222; }
     th, td { padding: 10px; border: 1px solid #444; text-align: left; }
     th { background: #333; }
+    tr:hover { background: #2c2c2c; }
   </style>
 </head>
 <body>
@@ -36,7 +37,7 @@
       measurementId: "G-8CH9X3LT6K"
     };
 
-    const app = firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const alertTable = document.getElementById("alertTable");
 
@@ -44,15 +45,23 @@
       alertTable.innerHTML = ""; // Clear table
       snapshot.forEach(child => {
         const data = child.val();
+        console.log("🚨 Data received:", data);
+
+        const room = data.room || "Unknown";
+        const time = data.time ? new Date(data.time).toLocaleString() : "N/A";
+        const intruder = data.intruder ? "🚨 Yes" : "No";
+
         const row = `
           <tr>
-            <td>${data.room}</td>
-            <td>${new Date(data.time).toLocaleString()}</td>
-            <td>${data.intruder ? "🚨 Yes" : "No"}</td>
+            <td>${room}</td>
+            <td>${time}</td>
+            <td>${intruder}</td>
           </tr>
         `;
         alertTable.innerHTML += row;
       });
+    }, (error) => {
+      console.error("❌ Firebase read failed:", error);
     });
   </script>
 </body>
