@@ -51,7 +51,8 @@
             <td>${data.intruder ? "🚨 Yes" : "No"}</td>
           </tr>
         `;
-        alertTable.innerHTML += row;
+        alertTable.innerHTML = row + alertTable.innerHTML;
+
       });
     });
   </script>
