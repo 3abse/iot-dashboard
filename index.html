@@ -41,8 +41,11 @@
     const db = firebase.database();
     const alertTable = document.getElementById("alertTable");
 
-    db.ref("alerts").on("value", (snapshot) => {
-      alertTable.innerHTML = ""; // Clear table
+    db.ref("alerts").once("value").then((snapshot) => {
+      alertTable.innerHTML = "";
+
+      const rows = [];
+
       snapshot.forEach(child => {
         const data = child.val();
         console.log("🚨 Data received:", data);
@@ -58,9 +61,14 @@
             <td>${intruder}</td>
           </tr>
         `;
-        alertTable.innerHTML = row + alertTable.innerHTML;
+
+        rows.push(row);
       });
-    }, (error) => {
+
+      rows.reverse().forEach(row => {
+        alertTable.innerHTML += row;
+      });
+    }).catch(error => {
       console.error("❌ Firebase read failed:", error);
     });
   </script>
