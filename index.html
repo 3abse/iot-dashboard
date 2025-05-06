@@ -41,7 +41,7 @@
     const db = firebase.database();
     const alertTable = document.getElementById("alertTable");
 
-    db.ref("alerts").once("value").then((snapshot) => {
+   db.ref("alerts").on("value", (snapshot) => {
       alertTable.innerHTML = "";
 
       const rows = [];
